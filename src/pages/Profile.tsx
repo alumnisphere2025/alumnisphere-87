@@ -24,33 +24,63 @@ import { toast } from "@/components/ui/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User, Mail, Calendar, Building, MapPin, UserCircle } from "lucide-react";
 
+// Define specific user data types
+interface BaseUserData {
+  name: string;
+  email: string;
+  bio: string;
+  phone: string;
+  location: string;
+  joinDate: string;
+  graduationYear: string;
+}
+
+interface AlumniData extends BaseUserData {
+  company: string;
+  position: string;
+  expertise: string[];
+  isAvailableForMentoring: boolean;
+}
+
+interface StudentData extends BaseUserData {
+  major: string;
+  interests: string[];
+  lookingForReferrals: boolean;
+}
+
+type UserDataType = AlumniData | StudentData;
+
 export default function Profile() {
   const { user } = useAuth();
   const isAlumni = user?.role === "alumni";
   
-  // Sample user data (in a real app, this would come from API)
-  const [userData, setUserData] = useState({
-    name: user?.name || "",
-    email: user?.email || "",
-    bio: "I'm passionate about technology and education.",
-    phone: "+1 (555) 123-4567",
-    location: "San Francisco, CA",
-    joinDate: "January 2023",
-    ...(isAlumni 
-      ? {
-          graduationYear: "2018",
-          company: "Tech Solutions Inc.",
-          position: "Senior Software Engineer",
-          expertise: ["Web Development", "Mobile Apps", "UX Design"],
-          isAvailableForMentoring: true,
-        }
-      : {
-          graduationYear: "2025 (Expected)",
-          major: "Computer Science",
-          interests: ["Artificial Intelligence", "Web Development", "Data Science"],
-          lookingForReferrals: true,
-        })
-  });
+  // Sample user data with proper typing
+  const [userData, setUserData] = useState<UserDataType>(
+    isAlumni ? {
+      name: user?.name || "",
+      email: user?.email || "",
+      bio: "I'm passionate about technology and education.",
+      phone: "+1 (555) 123-4567",
+      location: "San Francisco, CA",
+      joinDate: "January 2023",
+      graduationYear: "2018",
+      company: "Tech Solutions Inc.",
+      position: "Senior Software Engineer",
+      expertise: ["Web Development", "Mobile Apps", "UX Design"],
+      isAvailableForMentoring: true,
+    } : {
+      name: user?.name || "",
+      email: user?.email || "",
+      bio: "I'm passionate about technology and education.",
+      phone: "+1 (555) 123-4567",
+      location: "San Francisco, CA",
+      joinDate: "January 2023",
+      graduationYear: "2025 (Expected)",
+      major: "Computer Science",
+      interests: ["Artificial Intelligence", "Web Development", "Data Science"],
+      lookingForReferrals: true,
+    }
+  );
 
   const handleSave = () => {
     // In a real app, this would call an API to update the user
@@ -58,6 +88,11 @@ export default function Profile() {
       title: "Profile Updated",
       description: "Your profile information has been updated successfully.",
     });
+  };
+
+  // Type guard function to check if user is alumni
+  const isAlumniData = (data: UserDataType): data is AlumniData => {
+    return 'company' in data && 'position' in data;
   };
 
   return (
@@ -93,7 +128,7 @@ export default function Profile() {
                   <span>{userData.location}</span>
                 </div>
                 
-                {isAlumni ? (
+                {isAlumniData(userData) ? (
                   <>
                     <div className="flex items-center">
                       <Building className="h-5 w-5 mr-2 text-muted-foreground" />
@@ -193,7 +228,7 @@ export default function Profile() {
                 </TabsContent>
                 
                 <TabsContent value={isAlumni ? "professional" : "academic"} className="space-y-4">
-                  {isAlumni ? (
+                  {isAlumniData(userData) ? (
                     <>
                       <div className="space-y-2">
                         <Label htmlFor="company">Company</Label>
@@ -269,3 +304,4 @@ export default function Profile() {
     </div>
   );
 }
+
