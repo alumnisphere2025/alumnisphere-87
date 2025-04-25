@@ -9,7 +9,6 @@ export interface User {
   name: string;
   email: string;
   role: UserRole;
-  avatar?: string;
 }
 
 interface AuthContextType {
@@ -27,7 +26,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check for saved session
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
       setUser(JSON.parse(savedUser));
@@ -35,17 +33,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(false);
   }, []);
 
-  // Mock authentication functions for demo purposes
   const login = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      // In a real app, this would be an API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
       // Mock users for demo
       const mockUsers = [
-        { id: "1", name: "Alex Alumni", email: "alumni@example.com", password: "password", role: "alumni" as UserRole, avatar: "https://i.pravatar.cc/150?u=1" },
-        { id: "2", name: "Sam Student", email: "student@example.com", password: "password", role: "student" as UserRole, avatar: "https://i.pravatar.cc/150?u=2" }
+        { id: "1", name: "Alex Alumni", email: "alumni@example.com", password: "password", role: "alumni" as UserRole },
+        { id: "2", name: "Sam Student", email: "student@example.com", password: "password", role: "student" as UserRole }
       ];
       
       const foundUser = mockUsers.find(
@@ -87,16 +81,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signup = async (email: string, password: string, name: string, role: UserRole) => {
     setIsLoading(true);
     try {
-      // In a real app, this would be an API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Create mock user
+      // Create basic user without additional data
       const newUser = {
         id: Math.random().toString(36).substr(2, 9),
         name,
         email,
-        role,
-        avatar: `https://i.pravatar.cc/150?u=${Math.random()}`
+        role
       };
       
       setUser(newUser);
