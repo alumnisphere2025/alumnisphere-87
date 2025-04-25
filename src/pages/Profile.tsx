@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navbar } from "@/components/Navbar";
@@ -24,7 +23,6 @@ import { toast } from "@/components/ui/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User, Mail, Calendar, Building, MapPin, UserCircle } from "lucide-react";
 
-// Define specific user data types
 interface BaseUserData {
   name: string;
   email: string;
@@ -54,7 +52,6 @@ export default function Profile() {
   const { user } = useAuth();
   const isAlumni = user?.role === "alumni";
   
-  // Sample user data with proper typing
   const [userData, setUserData] = useState<UserDataType>(
     isAlumni ? {
       name: user?.name || "",
@@ -83,14 +80,12 @@ export default function Profile() {
   );
 
   const handleSave = () => {
-    // In a real app, this would call an API to update the user
     toast({
       title: "Profile Updated",
       description: "Your profile information has been updated successfully.",
     });
   };
 
-  // Type guard function to check if user is alumni
   const isAlumniData = (data: UserDataType): data is AlumniData => {
     return 'company' in data && 'position' in data;
   };
@@ -103,12 +98,10 @@ export default function Profile() {
         <h1 className="text-3xl font-bold mb-6">Your Profile</h1>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Profile Summary Card */}
           <Card className="md:col-span-1">
             <CardContent className="p-6 flex flex-col items-center text-center">
               <div className="mb-6">
                 <Avatar className="h-32 w-32">
-                  <AvatarImage src={user?.avatar} alt={user?.name} />
                   <AvatarFallback className="text-4xl">
                     {user?.name?.charAt(0)}
                   </AvatarFallback>
@@ -157,7 +150,6 @@ export default function Profile() {
             </CardContent>
           </Card>
           
-          {/* Profile Edit Tabs */}
           <Card className="md:col-span-2">
             <Tabs defaultValue="personal">
               <CardHeader>
@@ -282,10 +274,8 @@ export default function Profile() {
                 
                 <TabsContent value="preferences" className="space-y-4">
                   <div className="space-y-2">
-                    {/* Preferences would go here */}
                     <Label>Email Notifications</Label>
                     <div className="space-y-2">
-                      {/* Toggle switches would go here */}
                       <p className="text-muted-foreground text-sm">
                         Notification settings would appear here
                       </p>
@@ -304,4 +294,3 @@ export default function Profile() {
     </div>
   );
 }
-
