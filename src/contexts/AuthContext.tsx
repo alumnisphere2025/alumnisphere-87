@@ -19,6 +19,10 @@ interface AuthContextType {
   signup: (email: string, password: string, name: string, role: UserRole) => Promise<void>;
 }
 
+interface StoredUser extends User {
+  password: string;
+}
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -33,16 +37,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(false);
   }, []);
 
+  // Get registered users from localStorage
+  const getRegisteredUsers = (): StoredUser[] => {
+    const users = localStorage.getItem("registeredUsers");
+    return users ? JSON.parse(users) : [
+      { id: "1", name: "Alex Alumni", email: "alumni@example.com", password: "password", role: "alumni" as UserRole },
+      { id: "2", name: "Sam Student", email: "student@example.com", password: "password", role: "student" as UserRole }
+    ];
+  };
+
+  // Save registered users to localStorage
+  const saveRegisteredUsers = (users: StoredUser[]): void => {
+    localStorage.setItem("registeredUsers", JSON.stringify(users));
+  };
+
   const login = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      // Mock users for demo
-      const mockUsers = [
-        { id: "1", name: "Alex Alumni", email: "alumni@example.com", password: "password", role: "alumni" as UserRole },
-        { id: "2", name: "Sam Student", email: "student@example.com", password: "password", role: "student" as UserRole }
-      ];
+      const registeredUsers = getRegisteredUsers();
       
-      const foundUser = mockUsers.find(
+      const foundUser = registeredUsers.find(
         (u) => u.email === email && u.password === password
       );
       
@@ -52,7 +66,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem("user", JSON.stringify(userWithoutPassword));
         toast({
           title: "Login successful",
-          description: `Welcome back, ${userWithoutPassword.name}!`
+          description: `Welcome back, ${userWithoutPassword.name}!`,
         });
       } else {
         throw new Error("Invalid email or password");
@@ -81,21 +95,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signup = async (email: string, password: string, name: string, role: UserRole) => {
     setIsLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const registeredUsers = getRegisteredUsers();
       
-      // Create basic user without additional data
-      const newUser = {
+      // Check if user with this email already exists
+      if (registeredUsers.some(user => user.email === email)) {
+        throw new Error("User with this email already exists");
+      }
+      
+      // Create new user
+      const newUser: StoredUser = {
         id: Math.random().toString(36).substr(2, 9),
         name,
         email,
+        password,
         role
       };
       
-      setUser(newUser);
-      localStorage.setItem("user", JSON.stringify(newUser));
+      // Add to registered users
+      saveRegisteredUsers([...registeredUsers, newUser]);
+      
+      // Set current user (without password)
+      const { password: _, ...userWithoutPassword } = newUser;
+      setUser(userWithoutPassword);
+      localStorage.setItem("user", JSON.stringify(userWithoutPassword));
+      
       toast({
         title: "Account created",
-        description: `Welcome to AlumniSphere, ${name}!`
+        description: `Welcome to AlumniSphere, ${name}!`,
+        className: "bg-gradient-to-r from-green-500 to-emerald-500 border-green-600 text-white",
       });
     } catch (error) {
       toast({
