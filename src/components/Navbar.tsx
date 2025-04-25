@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ export function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const isMobile = useIsMobile();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
 
   const navItems = [
     { title: "Dashboard", href: "/dashboard" },
@@ -23,7 +24,7 @@ export function Navbar() {
   ];
 
   const studentNavItems = [
-    { title: "Ask for Mentorship", href: "/mentorship-request" },
+    { title: "Mentorship", href: "/mentorship-request" },
     { title: "Referral Requests", href: "/referral-request" },
     { title: "Alumni Directory", href: "/alumni-directory" },
   ];
@@ -39,13 +40,29 @@ export function Navbar() {
   
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
+  // Prevent auto-logout after navigation
+  if (!user && (
+    location.pathname === "/dashboard" || 
+    location.pathname === "/profile" ||
+    location.pathname === "/announcements" ||
+    location.pathname === "/settings" ||
+    location.pathname === "/referrals" ||
+    location.pathname === "/mentorship" ||
+    location.pathname === "/leaderboard" ||
+    location.pathname === "/alumni-directory" ||
+    location.pathname === "/mentorship-request" ||
+    location.pathname === "/referral-request"
+  )) {
+    return null;
+  }
+
   return (
     <nav className="border-b bg-background sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 flex items-center">
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">
                 AlumniSphere
               </h1>
             </Link>

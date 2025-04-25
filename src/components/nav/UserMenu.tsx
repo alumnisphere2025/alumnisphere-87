@@ -16,12 +16,18 @@ import { useAuth } from "@/contexts/AuthContext";
 export function UserMenu() {
   const { user, logout } = useAuth();
 
+  const getInitials = (name: string) => {
+    return name.split(" ").map(name => name[0]).join("");
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
           <Avatar>
-            <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
+            <AvatarFallback className="bg-primary/10 text-primary">
+              {user?.name ? getInitials(user.name) : "?"}
+            </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
