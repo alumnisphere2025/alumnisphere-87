@@ -1,10 +1,11 @@
 
 import { Toaster } from "@/components/ui/toaster";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { AnimatePresence } from "framer-motion";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 // Pages
 import Home from "./pages/Home";
@@ -32,7 +33,14 @@ const App = () => (
               <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
-              <Route path="/referral-request" element={<ReferralRequest />} />
+              <Route 
+                path="/referral-request" 
+                element={
+                  <ProtectedRoute>
+                    <ReferralRequest />
+                  </ProtectedRoute>
+                } 
+              />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </AnimatePresence>

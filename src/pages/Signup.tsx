@@ -44,7 +44,7 @@ export default function Signup() {
     
     try {
       await signup(email, password, name, role);
-      navigate("/dashboard", { replace: true });
+      navigate("/home", { replace: true }); // Change from /dashboard to /home
     } finally {
       setIsSubmitting(false);
     }

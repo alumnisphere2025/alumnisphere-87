@@ -22,8 +22,8 @@ export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   
-  // Get the redirect path from location state or default to dashboard
-  const from = location.state?.from?.pathname || "/dashboard";
+  // Redirect to home instead of dashboard
+  const from = location.state?.from?.pathname || "/home";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
