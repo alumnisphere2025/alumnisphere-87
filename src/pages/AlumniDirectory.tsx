@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navbar } from "@/components/Navbar";
 import { 
@@ -24,83 +24,130 @@ import {
 } from "@/components/ui/select";
 import { Briefcase, Building, Mail, Search, User2 } from "lucide-react";
 
+// Type for alumni data
+interface AlumniData {
+  id: string;
+  name: string;
+  company?: string;
+  role?: string;
+  gradYear: string;
+  industry?: string;
+  location?: string;
+  email: string;
+  bio?: string;
+  major?: string;
+}
+
 export default function AlumniDirectory() {
   const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [industryFilter, setIndustryFilter] = useState("");
+  const [alumniData, setAlumniData] = useState<AlumniData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Sample alumni data
-  const alumniData = [
-    {
-      id: "1",
-      name: "Alex Johnson",
-      company: "Tech Solutions Inc.",
-      role: "Software Engineer",
-      gradYear: "2018",
-      industry: "Technology",
-      location: "San Francisco, CA",
-      email: "alex.johnson@example.com",
-      bio: "Experienced software engineer with a passion for web development and cloud architecture."
-    },
-    {
-      id: "2",
-      name: "Morgan Lee",
-      company: "DataVision Analytics",
-      role: "Data Scientist",
-      gradYear: "2019",
-      industry: "Data Science",
-      location: "New York, NY",
-      email: "morgan.lee@example.com",
-      bio: "Data scientist specializing in machine learning and predictive analytics."
-    },
-    {
-      id: "3",
-      name: "Taylor Wilson",
-      company: "Creative Designs",
-      role: "UX Designer",
-      gradYear: "2017",
-      industry: "Design",
-      location: "Los Angeles, CA",
-      email: "taylor.wilson@example.com",
-      bio: "UX designer passionate about creating intuitive and accessible user experiences."
-    },
-    {
-      id: "4",
-      name: "Jamie Smith",
-      company: "InnovateCorp",
-      role: "Product Manager",
-      gradYear: "2016",
-      industry: "Product Management",
-      location: "Seattle, WA",
-      email: "jamie.smith@example.com",
-      bio: "Product manager with experience in tech startups and enterprise software."
-    },
-    {
-      id: "5",
-      name: "Jordan Brown",
-      company: "Finance Solutions",
-      role: "Financial Analyst",
-      gradYear: "2020",
-      industry: "Finance",
-      location: "Chicago, IL",
-      email: "jordan.brown@example.com",
-      bio: "Financial analyst with expertise in market research and investment strategies."
-    }
-  ];
+  // Fetch alumni data - in a real app this would come from your API
+  useEffect(() => {
+    // Simulate API call
+    setTimeout(() => {
+      // This is a placeholder - in a real app, you'd fetch from your backend
+      const mockData: AlumniData[] = [
+        {
+          id: "1",
+          name: "Alex Johnson",
+          company: "Tech Solutions Inc.",
+          role: "Software Engineer",
+          gradYear: "2018",
+          industry: "Technology",
+          location: "San Francisco, CA",
+          email: "alex.johnson@example.com",
+          bio: "Experienced software engineer with a passion for web development and cloud architecture."
+        },
+        {
+          id: "2",
+          name: "Morgan Lee",
+          company: "DataVision Analytics",
+          role: "Data Scientist",
+          gradYear: "2019",
+          industry: "Data Science",
+          location: "New York, NY",
+          email: "morgan.lee@example.com",
+          bio: "Data scientist specializing in machine learning and predictive analytics."
+        },
+        {
+          id: "3",
+          name: "Taylor Wilson",
+          company: "Creative Designs",
+          role: "UX Designer",
+          gradYear: "2017",
+          industry: "Design",
+          location: "Los Angeles, CA",
+          email: "taylor.wilson@example.com",
+          bio: "UX designer passionate about creating intuitive and accessible user experiences."
+        },
+        {
+          id: "4",
+          name: "Jamie Smith",
+          company: "InnovateCorp",
+          role: "Product Manager",
+          gradYear: "2016",
+          industry: "Product Management",
+          location: "Seattle, WA",
+          email: "jamie.smith@example.com",
+          bio: "Product manager with experience in tech startups and enterprise software."
+        },
+        {
+          id: "5",
+          name: "Jordan Brown",
+          company: "Finance Solutions",
+          role: "Financial Analyst",
+          gradYear: "2020",
+          industry: "Finance",
+          location: "Chicago, IL",
+          email: "jordan.brown@example.com",
+          bio: "Financial analyst with expertise in market research and investment strategies."
+        }
+      ];
+      
+      // If the user provides additional alumni data in their account, add them here
+      if (user?.role === "alumni") {
+        const currentUserAsAlumni: AlumniData = {
+          id: user.id || "current",
+          name: user.name || "Current User",
+          company: user.company || "Your Company",
+          role: user.position || "Your Position",
+          gradYear: user.graduationYear || "Your Graduation Year",
+          industry: user.industry || "Your Industry",
+          location: user.location || "Your Location",
+          email: user.email || "your.email@example.com",
+          bio: user.bio || "Your professional bio"
+        };
+        
+        mockData.unshift(currentUserAsAlumni);
+      }
+      
+      setAlumniData(mockData);
+      setIsLoading(false);
+    }, 1000);
+  }, [user]);
 
-  const industries = [...new Set(alumniData.map(alum => alum.industry))];
+  const industries = [...new Set(alumniData.map(alum => alum.industry).filter(Boolean))];
 
   const filteredAlumni = alumniData.filter(alum => {
     const matchesQuery = searchQuery === "" || 
       alum.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      alum.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      alum.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      alum.bio.toLowerCase().includes(searchQuery.toLowerCase());
+      (alum.company && alum.company.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (alum.role && alum.role.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (alum.bio && alum.bio.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (alum.major && alum.major.toLowerCase().includes(searchQuery.toLowerCase()));
       
     const matchesIndustry = industryFilter === "" || alum.industry === industryFilter;
     
     return matchesQuery && matchesIndustry;
   });
+
+  const getInitials = (name: string) => {
+    return name.split(" ").map(name => name[0]).join("");
+  };
 
   return (
     <div className="min-h-screen bg-muted/30">
@@ -128,21 +175,25 @@ export default function AlumniDirectory() {
             <SelectContent>
               <SelectItem value="">All Industries</SelectItem>
               {industries.map(industry => (
-                <SelectItem key={industry} value={industry}>{industry}</SelectItem>
+                industry && <SelectItem key={industry} value={industry}>{industry}</SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
         
-        {filteredAlumni.length > 0 ? (
+        {isLoading ? (
+          <div className="flex justify-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          </div>
+        ) : filteredAlumni.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredAlumni.map(alum => (
-              <Card key={alum.id}>
+              <Card key={alum.id} className="overflow-hidden">
                 <CardHeader>
                   <div className="flex items-center gap-4">
                     <Avatar className="h-12 w-12">
-                      <AvatarFallback className="bg-primary/10 text-primary">
-                        {alum.name.split(" ").map(name => name[0]).join("")}
+                      <AvatarFallback className="bg-blue-600/10 text-blue-700 dark:bg-blue-700/20 dark:text-blue-300">
+                        {getInitials(alum.name)}
                       </AvatarFallback>
                     </Avatar>
                     <div>
@@ -153,25 +204,29 @@ export default function AlumniDirectory() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    <div className="flex items-start">
-                      <Briefcase className="h-4 w-4 mt-0.5 mr-2 text-muted-foreground" />
-                      <span>{alum.role}</span>
-                    </div>
-                    <div className="flex items-start">
-                      <Building className="h-4 w-4 mt-0.5 mr-2 text-muted-foreground" />
-                      <span>{alum.company}</span>
-                    </div>
+                    {alum.role && alum.company && (
+                      <div className="flex items-start">
+                        <Briefcase className="h-4 w-4 mt-0.5 mr-2 text-muted-foreground" />
+                        <span>{alum.role} at {alum.company}</span>
+                      </div>
+                    )}
+                    {!alum.company && alum.major && (
+                      <div className="flex items-start">
+                        <Building className="h-4 w-4 mt-0.5 mr-2 text-muted-foreground" />
+                        <span>{alum.major}</span>
+                      </div>
+                    )}
                     <div className="flex items-start">
                       <Mail className="h-4 w-4 mt-0.5 mr-2 text-muted-foreground" />
                       <span className="text-sm">{alum.email}</span>
                     </div>
-                    <p className="mt-3 text-sm border-t pt-3">{alum.bio}</p>
+                    {alum.bio && <p className="mt-3 text-sm border-t pt-3">{alum.bio}</p>}
                     
                     <div className="flex gap-2 mt-4">
                       <Button variant="outline" size="sm" className="flex-1">
                         Message
                       </Button>
-                      <Button size="sm" className="flex-1">
+                      <Button size="sm" className="flex-1 bg-blue-600 hover:bg-blue-700">
                         Connect
                       </Button>
                     </div>

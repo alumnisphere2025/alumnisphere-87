@@ -25,7 +25,7 @@ export function UserMenu() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
           <Avatar>
-            <AvatarFallback className="bg-primary/10 text-primary">
+            <AvatarFallback className="bg-blue-600/10 text-blue-700 dark:bg-blue-700/20 dark:text-blue-300">
               {user?.name ? getInitials(user.name) : "?"}
             </AvatarFallback>
           </Avatar>

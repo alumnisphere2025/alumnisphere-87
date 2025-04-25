@@ -28,6 +28,10 @@ export default function Signup() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState<UserRole>("student");
+  const [graduationYear, setGraduationYear] = useState("");
+  const [major, setMajor] = useState("");
+  const [company, setCompany] = useState("");
+  const [position, setPosition] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { signup } = useAuth();
   const navigate = useNavigate();
@@ -43,12 +47,20 @@ export default function Signup() {
     setIsSubmitting(true);
     
     try {
-      await signup(email, password, name, role);
+      // Include additional user information based on role
+      const additionalInfo = role === 'student' 
+        ? { graduationYear, major } 
+        : { graduationYear, company, position };
+      
+      await signup(email, password, name, role, additionalInfo);
       navigate("/dashboard", { replace: true });
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  const currentYear = new Date().getFullYear();
+  const graduationYears = Array.from({ length: 20 }, (_, i) => (currentYear - 10 + i).toString());
 
   return (
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-12">
@@ -98,6 +110,60 @@ export default function Signup() {
                 </SelectContent>
               </Select>
             </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="graduationYear">Graduation Year</Label>
+              <Select
+                value={graduationYear}
+                onValueChange={setGraduationYear}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select graduation year" />
+                </SelectTrigger>
+                <SelectContent>
+                  {graduationYears.map(year => (
+                    <SelectItem key={year} value={year}>{year}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            
+            {role === "student" ? (
+              <div className="space-y-2">
+                <Label htmlFor="major">Major / Field of Study</Label>
+                <Input
+                  id="major"
+                  placeholder="Computer Science"
+                  value={major}
+                  onChange={(e) => setMajor(e.target.value)}
+                  required
+                />
+              </div>
+            ) : (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="company">Current Company</Label>
+                  <Input
+                    id="company"
+                    placeholder="Tech Solutions Inc."
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="position">Current Position</Label>
+                  <Input
+                    id="position"
+                    placeholder="Software Engineer"
+                    value={position}
+                    onChange={(e) => setPosition(e.target.value)}
+                    required
+                  />
+                </div>
+              </>
+            )}
+            
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <Input

@@ -22,6 +22,7 @@ import Settings from "./pages/Settings";
 import Announcements from "./pages/Announcements";
 import Referrals from "./pages/Referrals";
 import Mentorship from "./pages/Mentorship";
+import MentorshipRequest from "./pages/MentorshipRequest";
 import Leaderboard from "./pages/Leaderboard";
 import AlumniDirectory from "./pages/AlumniDirectory";
 
@@ -86,6 +87,14 @@ const App = () => (
                 element={
                   <ProtectedRoute>
                     <Mentorship />
+                  </ProtectedRoute>
+                }
+              />
+              <Route 
+                path="/mentorship-request" 
+                element={
+                  <ProtectedRoute>
+                    <MentorshipRequest />
                   </ProtectedRoute>
                 }
               />
