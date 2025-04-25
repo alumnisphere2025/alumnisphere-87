@@ -22,47 +22,23 @@ export default function Dashboard() {
   const { user } = useAuth();
   const isAlumni = user?.role === "alumni";
 
-  // Sample stats and activity data
+  // Empty stats and activity data
   const stats = isAlumni 
     ? [
-        { title: "Mentees", value: "12", icon: Users },
-        { title: "Referrals", value: "24", icon: FileText },
-        { title: "Upcoming Sessions", value: "3", icon: Calendar },
-        { title: "Leaderboard Position", value: "#5", icon: Award },
+        { title: "Mentees", value: "0", icon: Users },
+        { title: "Referrals", value: "0", icon: FileText },
+        { title: "Upcoming Sessions", value: "0", icon: Calendar },
+        { title: "Leaderboard Position", value: "-", icon: Award },
       ]
     : [
-        { title: "Referral Requests", value: "3", icon: FileText },
-        { title: "Mentorship Sessions", value: "2", icon: Calendar },
-        { title: "Alumni Connections", value: "8", icon: LinkIcon },
-        { title: "Messages Sent", value: "15", icon: MessageSquare },
+        { title: "Referral Requests", value: "0", icon: FileText },
+        { title: "Mentorship Sessions", value: "0", icon: Calendar },
+        { title: "Alumni Connections", value: "0", icon: LinkIcon },
+        { title: "Messages Sent", value: "0", icon: MessageSquare },
       ];
 
-  const recentActivity = isAlumni
-    ? [
-        { type: "Referral", description: "New referral request from Jane Smith", time: "2 hours ago" },
-        { type: "Mentorship", description: "Scheduled mentorship session with Mike Jones", time: "Yesterday" },
-        { type: "Profile", description: "3 students viewed your profile", time: "2 days ago" },
-      ]
-    : [
-        { type: "Referral", description: "Your referral request was accepted by Alex Alumni", time: "5 hours ago" },
-        { type: "Mentorship", description: "New message from your mentor Taylor", time: "Yesterday" },
-        { type: "Announcement", description: "New career fair announced", time: "2 days ago" },
-      ];
-
-  const announcements = [
-    {
-      title: "Annual Alumni Meet",
-      description: "Join us for the Annual Alumni Meet on June 15th, 2025",
-    },
-    {
-      title: "New Mentorship Program",
-      description: "We're launching a structured mentorship program next month",
-    },
-    {
-      title: "Career Fair",
-      description: "The Spring Career Fair will be held on April 10th, 2025",
-    },
-  ];
+  const recentActivity: Array<{ type: string; description: string; time: string }> = [];
+  const announcements = [];
 
   return (
     <div className="min-h-screen bg-muted/30">
@@ -98,22 +74,28 @@ export default function Dashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-5">
-                {recentActivity.map((activity, index) => (
-                  <div key={index} className="flex items-start">
-                    <div className="mr-4 mt-1 bg-primary/10 p-2 rounded-full">
-                      {activity.type === "Referral" && <FileText className="h-4 w-4 text-primary" />}
-                      {activity.type === "Mentorship" && <Users className="h-4 w-4 text-primary" />}
-                      {activity.type === "Profile" && <Users className="h-4 w-4 text-primary" />}
-                      {activity.type === "Announcement" && <Bell className="h-4 w-4 text-primary" />}
+              {recentActivity.length > 0 ? (
+                <div className="space-y-5">
+                  {recentActivity.map((activity, index) => (
+                    <div key={index} className="flex items-start">
+                      <div className="mr-4 mt-1 bg-primary/10 p-2 rounded-full">
+                        {activity.type === "Referral" && <FileText className="h-4 w-4 text-primary" />}
+                        {activity.type === "Mentorship" && <Users className="h-4 w-4 text-primary" />}
+                        {activity.type === "Profile" && <Users className="h-4 w-4 text-primary" />}
+                        {activity.type === "Announcement" && <Bell className="h-4 w-4 text-primary" />}
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-medium">{activity.description}</p>
+                        <p className="text-sm text-muted-foreground">{activity.time}</p>
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <p className="font-medium">{activity.description}</p>
-                      <p className="text-sm text-muted-foreground">{activity.time}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <p className="text-muted-foreground">No recent activity</p>
+                </div>
+              )}
             </CardContent>
           </Card>
           
@@ -126,14 +108,20 @@ export default function Dashboard() {
               <CardDescription>Latest updates from AlumniSphere</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {announcements.map((announcement, index) => (
-                  <div key={index} className="border-l-4 border-primary pl-4 py-1">
-                    <h3 className="font-medium">{announcement.title}</h3>
-                    <p className="text-sm text-muted-foreground">{announcement.description}</p>
-                  </div>
-                ))}
-              </div>
+              {announcements.length > 0 ? (
+                <div className="space-y-4">
+                  {announcements.map((announcement: any, index) => (
+                    <div key={index} className="border-l-4 border-primary pl-4 py-1">
+                      <h3 className="font-medium">{announcement.title}</h3>
+                      <p className="text-sm text-muted-foreground">{announcement.description}</p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <p className="text-muted-foreground">No announcements</p>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
@@ -154,8 +142,9 @@ export default function Dashboard() {
                     <CardDescription>Students waiting for your guidance</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <p>You have 5 pending mentorship requests</p>
-                    {/* This would typically be a list of requests */}
+                    <p className="text-center text-muted-foreground py-8">
+                      You have 0 pending mentorship requests
+                    </p>
                   </CardContent>
                 </Card>
                 
@@ -165,8 +154,9 @@ export default function Dashboard() {
                     <CardDescription>Students you've helped with referrals</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <p>15 students successfully placed with your referrals</p>
-                    {/* This would typically show more statistics */}
+                    <p className="text-center text-muted-foreground py-8">
+                      No students placed with your referrals yet
+                    </p>
                   </CardContent>
                 </Card>
               </>
@@ -179,8 +169,9 @@ export default function Dashboard() {
                     <CardDescription>Alumni available for mentorship</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <p>12 alumni in your field are available for mentorship</p>
-                    {/* This would typically be a list of alumni */}
+                    <p className="text-center text-muted-foreground py-8">
+                      No alumni currently available for mentorship
+                    </p>
                   </CardContent>
                 </Card>
                 
@@ -190,8 +181,9 @@ export default function Dashboard() {
                     <CardDescription>Companies with alumni connections</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <p>Alumni work at 25+ companies in your field of interest</p>
-                    {/* This would typically show more information */}
+                    <p className="text-center text-muted-foreground py-8">
+                      No referral opportunities available currently
+                    </p>
                   </CardContent>
                 </Card>
               </>
