@@ -9,6 +9,14 @@ export interface User {
   name: string;
   email: string;
   role: UserRole;
+  // Add missing properties for both student and alumni
+  company?: string;
+  position?: string;
+  graduationYear?: string;
+  industry?: string;
+  location?: string;
+  bio?: string;
+  major?: string;
 }
 
 interface AuthContextType {
@@ -16,7 +24,7 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
-  signup: (email: string, password: string, name: string, role: UserRole) => Promise<void>;
+  signup: (email: string, password: string, name: string, role: UserRole, additionalInfo?: Record<string, string>) => Promise<void>;
 }
 
 interface StoredUser extends User {
@@ -92,7 +100,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
-  const signup = async (email: string, password: string, name: string, role: UserRole) => {
+  const signup = async (email: string, password: string, name: string, role: UserRole, additionalInfo?: Record<string, string>) => {
     setIsLoading(true);
     try {
       const registeredUsers = getRegisteredUsers();
@@ -102,13 +110,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         throw new Error("User with this email already exists");
       }
       
-      // Create new user
+      // Create new user with additional information
       const newUser: StoredUser = {
         id: Math.random().toString(36).substr(2, 9),
         name,
         email,
         password,
-        role
+        role,
+        ...additionalInfo // Spread additional info (major, graduationYear, company, position, etc.)
       };
       
       // Add to registered users
