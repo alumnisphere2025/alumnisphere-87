@@ -31,14 +31,28 @@ const countryCodes = [
 ];
 
 const locations = [
-  "New York, USA",
-  "London, UK",
+  "New York City, USA",
+  "Los Angeles, USA",
   "San Francisco, USA",
+  "Chicago, USA",
+  "Boston, USA",
+  "Seattle, USA",
+  "Austin, USA",
+  "Miami, USA",
+  "London, UK",
+  "Manchester, UK",
   "Toronto, Canada",
+  "Vancouver, Canada",
   "Sydney, Australia",
+  "Melbourne, Australia",
   "Singapore",
   "Tokyo, Japan",
   "Berlin, Germany",
+  "Munich, Germany",
+  "Paris, France",
+  "Mumbai, India",
+  "Bangalore, India",
+  "Delhi, India"
 ];
 
 export default function Signup() {
