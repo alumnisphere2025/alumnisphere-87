@@ -21,6 +21,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { UserRole } from "@/contexts/AuthContext";
+import { SearchableDropdown } from "@/components/SearchableDropdown";
+import { countries } from "@/utils/countryData";
 
 const countryCodes = [
   { code: "+1", country: "USA/Canada" },
@@ -66,8 +68,8 @@ export default function Signup() {
   const [company, setCompany] = useState("");
   const [position, setPosition] = useState("");
   const [location, setLocation] = useState("");
-  const [countryCode, setCountryCode] = useState("+1");
   const [phone, setPhone] = useState("");
+  const [country, setCountry] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -91,14 +93,14 @@ export default function Signup() {
             graduationYear, 
             major,
             location,
-            phone: `${countryCode}${phone}`
+            phone: `${selectedCountry?.dialCode}${phone}`
           } 
         : { 
             graduationYear, 
             company, 
             position,
             location,
-            phone: `${countryCode}${phone}`
+            phone: `${selectedCountry?.dialCode}${phone}`
           };
       
       await signup(email, password, name, role, additionalInfo);
@@ -110,6 +112,12 @@ export default function Signup() {
 
   const currentYear = new Date().getFullYear();
   const graduationYears = Array.from({ length: 20 }, (_, i) => (currentYear - 10 + i).toString());
+
+  const selectedCountry = countries.find(c => c.code === country);
+  const countryOptions = countries.map(country => ({
+    value: country.code,
+    label: `${country.name} (${country.dialCode})`
+  }));
 
   return (
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-12">
@@ -178,20 +186,24 @@ export default function Signup() {
             </div>
 
             <div className="space-y-2">
+              <Label>Country</Label>
+              <SearchableDropdown
+                options={countryOptions}
+                value={country}
+                onChange={setCountry}
+                placeholder="Select your country"
+              />
+            </div>
+
+            <div className="space-y-2">
               <Label>Phone Number</Label>
               <div className="flex gap-2">
-                <Select value={countryCode} onValueChange={setCountryCode}>
-                  <SelectTrigger className="w-[120px]">
-                    <SelectValue placeholder="Code" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {countryCodes.map(({ code, country }) => (
-                      <SelectItem key={code} value={code}>
-                        {code} {country}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Input
+                  type="tel"
+                  value={selectedCountry?.dialCode || ""}
+                  readOnly
+                  className="w-24 bg-muted"
+                />
                 <Input
                   type="tel"
                   placeholder="Phone number"
