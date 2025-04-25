@@ -16,6 +16,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Index from "./pages/Index";
 import ReferralRequest from "./pages/ReferralRequest";
+import Dashboard from "./pages/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +34,14 @@ const App = () => (
               <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route 
+                path="/dashboard" 
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
               <Route 
                 path="/referral-request" 
                 element={
