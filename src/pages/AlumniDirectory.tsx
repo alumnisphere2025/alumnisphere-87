@@ -23,14 +23,13 @@ import {
   SelectValue 
 } from "@/components/ui/select";
 import { Briefcase, Building, Mail, Search, User2 } from "lucide-react";
+import { User } from "@/contexts/AuthContext";
 
-// Type for alumni data
-interface AlumniData {
+interface AlumniData extends User {
   id: string;
-  name: string;
   company?: string;
-  role?: string;
-  gradYear: string;
+  position?: string;
+  graduationYear?: string;
   industry?: string;
   location?: string;
   email: string;
@@ -45,90 +44,19 @@ export default function AlumniDirectory() {
   const [alumniData, setAlumniData] = useState<AlumniData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch alumni data - in a real app this would come from your API
+  // Get registered users from localStorage
+  const getRegisteredUsers = () => {
+    const users = localStorage.getItem("registeredUsers");
+    return users ? JSON.parse(users) : [];
+  };
+
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      // This is a placeholder - in a real app, you'd fetch from your backend
-      const mockData: AlumniData[] = [
-        {
-          id: "1",
-          name: "Alex Johnson",
-          company: "Tech Solutions Inc.",
-          role: "Software Engineer",
-          gradYear: "2018",
-          industry: "Technology",
-          location: "San Francisco, CA",
-          email: "alex.johnson@example.com",
-          bio: "Experienced software engineer with a passion for web development and cloud architecture."
-        },
-        {
-          id: "2",
-          name: "Morgan Lee",
-          company: "DataVision Analytics",
-          role: "Data Scientist",
-          gradYear: "2019",
-          industry: "Data Science",
-          location: "New York, NY",
-          email: "morgan.lee@example.com",
-          bio: "Data scientist specializing in machine learning and predictive analytics."
-        },
-        {
-          id: "3",
-          name: "Taylor Wilson",
-          company: "Creative Designs",
-          role: "UX Designer",
-          gradYear: "2017",
-          industry: "Design",
-          location: "Los Angeles, CA",
-          email: "taylor.wilson@example.com",
-          bio: "UX designer passionate about creating intuitive and accessible user experiences."
-        },
-        {
-          id: "4",
-          name: "Jamie Smith",
-          company: "InnovateCorp",
-          role: "Product Manager",
-          gradYear: "2016",
-          industry: "Product Management",
-          location: "Seattle, WA",
-          email: "jamie.smith@example.com",
-          bio: "Product manager with experience in tech startups and enterprise software."
-        },
-        {
-          id: "5",
-          name: "Jordan Brown",
-          company: "Finance Solutions",
-          role: "Financial Analyst",
-          gradYear: "2020",
-          industry: "Finance",
-          location: "Chicago, IL",
-          email: "jordan.brown@example.com",
-          bio: "Financial analyst with expertise in market research and investment strategies."
-        }
-      ];
-      
-      // If the user provides additional alumni data in their account, add them here
-      if (user?.role === "alumni") {
-        const currentUserAsAlumni: AlumniData = {
-          id: user.id || "current",
-          name: user.name || "Current User",
-          company: user.company || "Your Company",
-          role: user.position || "Your Position",
-          gradYear: user.graduationYear || "Your Graduation Year",
-          industry: user.industry || "Your Industry",
-          location: user.location || "Your Location",
-          email: user.email || "your.email@example.com",
-          bio: user.bio || "Your professional bio"
-        };
-        
-        mockData.unshift(currentUserAsAlumni);
-      }
-      
-      setAlumniData(mockData);
-      setIsLoading(false);
-    }, 1000);
-  }, [user]);
+    // Get actual alumni data from registered users
+    const registeredUsers = getRegisteredUsers();
+    const alumni = registeredUsers.filter((user: AlumniData) => user.role === "alumni");
+    setAlumniData(alumni);
+    setIsLoading(false);
+  }, []);
 
   const industries = [...new Set(alumniData.map(alum => alum.industry).filter(Boolean))];
 
@@ -136,7 +64,7 @@ export default function AlumniDirectory() {
     const matchesQuery = searchQuery === "" || 
       alum.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (alum.company && alum.company.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (alum.role && alum.role.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (alum.position && alum.position.toLowerCase().includes(searchQuery.toLowerCase())) ||
       (alum.bio && alum.bio.toLowerCase().includes(searchQuery.toLowerCase())) ||
       (alum.major && alum.major.toLowerCase().includes(searchQuery.toLowerCase()));
       
@@ -146,7 +74,7 @@ export default function AlumniDirectory() {
   });
 
   const getInitials = (name: string) => {
-    return name.split(" ").map(name => name[0]).join("");
+    return name.split(" ").map(n => n[0]).join("").toUpperCase();
   };
 
   return (
@@ -198,16 +126,16 @@ export default function AlumniDirectory() {
                     </Avatar>
                     <div>
                       <CardTitle>{alum.name}</CardTitle>
-                      <p className="text-sm text-muted-foreground">Class of {alum.gradYear}</p>
+                      <p className="text-sm text-muted-foreground">Class of {alum.graduationYear}</p>
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {alum.role && alum.company && (
+                    {alum.position && alum.company && (
                       <div className="flex items-start">
                         <Briefcase className="h-4 w-4 mt-0.5 mr-2 text-muted-foreground" />
-                        <span>{alum.role} at {alum.company}</span>
+                        <span>{alum.position} at {alum.company}</span>
                       </div>
                     )}
                     {!alum.company && alum.major && (

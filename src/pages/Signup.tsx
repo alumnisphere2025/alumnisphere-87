@@ -1,9 +1,9 @@
-
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Eye, EyeOff } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -22,6 +22,25 @@ import {
 } from "@/components/ui/select";
 import { UserRole } from "@/contexts/AuthContext";
 
+const countryCodes = [
+  { code: "+1", country: "USA/Canada" },
+  { code: "+44", country: "UK" },
+  { code: "+91", country: "India" },
+  { code: "+61", country: "Australia" },
+  { code: "+86", country: "China" },
+];
+
+const locations = [
+  "New York, USA",
+  "London, UK",
+  "San Francisco, USA",
+  "Toronto, Canada",
+  "Sydney, Australia",
+  "Singapore",
+  "Tokyo, Japan",
+  "Berlin, Germany",
+];
+
 export default function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -32,7 +51,13 @@ export default function Signup() {
   const [major, setMajor] = useState("");
   const [company, setCompany] = useState("");
   const [position, setPosition] = useState("");
+  const [location, setLocation] = useState("");
+  const [countryCode, setCountryCode] = useState("+1");
+  const [phone, setPhone] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
   const { signup } = useAuth();
   const navigate = useNavigate();
 
@@ -47,10 +72,20 @@ export default function Signup() {
     setIsSubmitting(true);
     
     try {
-      // Include additional user information based on role
       const additionalInfo = role === 'student' 
-        ? { graduationYear, major } 
-        : { graduationYear, company, position };
+        ? { 
+            graduationYear, 
+            major,
+            location,
+            phone: `${countryCode}${phone}`
+          } 
+        : { 
+            graduationYear, 
+            company, 
+            position,
+            location,
+            phone: `${countryCode}${phone}`
+          };
       
       await signup(email, password, name, role, additionalInfo);
       navigate("/dashboard", { replace: true });
@@ -127,7 +162,46 @@ export default function Signup() {
                 </SelectContent>
               </Select>
             </div>
-            
+
+            <div className="space-y-2">
+              <Label>Phone Number</Label>
+              <div className="flex gap-2">
+                <Select value={countryCode} onValueChange={setCountryCode}>
+                  <SelectTrigger className="w-[120px]">
+                    <SelectValue placeholder="Code" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {countryCodes.map(({ code, country }) => (
+                      <SelectItem key={code} value={code}>
+                        {code} {country}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Input
+                  type="tel"
+                  placeholder="Phone number"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="flex-1"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="location">Location</Label>
+              <Select value={location} onValueChange={setLocation}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select your location" />
+                </SelectTrigger>
+                <SelectContent>
+                  {locations.map(loc => (
+                    <SelectItem key={loc} value={loc}>{loc}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
             {role === "student" ? (
               <div className="space-y-2">
                 <Label htmlFor="major">Major / Field of Study</Label>
@@ -166,27 +240,51 @@ export default function Signup() {
             
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                autoComplete="new-password"
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-2.5 text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? 
+                    <EyeOff className="h-5 w-5" /> : 
+                    <Eye className="h-5 w-5" />
+                  }
+                </button>
+              </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <Input
-                id="confirmPassword"
-                type="password"
-                placeholder="••••••••"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                autoComplete="new-password"
-              />
+              <div className="relative">
+                <Input
+                  id="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  className="pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-2.5 text-gray-500 hover:text-gray-700"
+                >
+                  {showConfirmPassword ? 
+                    <EyeOff className="h-5 w-5" /> : 
+                    <Eye className="h-5 w-5" />
+                  }
+                </button>
+              </div>
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
