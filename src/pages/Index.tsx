@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -8,8 +9,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      {/* Navbar with neon glass effect */}
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-black/40 border-b border-violet-500/20">
+      {/* Navbar with theme-specific glass effect */}
+      <header className="sticky top-0 z-50 backdrop-blur-md header-bg">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center">
             <h1 className="text-2xl font-bold text-gradient">
@@ -36,7 +37,7 @@ const Index = () => {
         </div>
       </header>
 
-      {/* Hero Section with enhanced neon animations */}
+      {/* Hero Section with enhanced theme-specific animations */}
       <section className="container mx-auto px-4 py-16 md:py-24 flex flex-col md:flex-row items-center">
         <div className="md:w-1/2 mb-8 md:mb-0 animate-fade-slide-in">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-gradient">
@@ -61,8 +62,8 @@ const Index = () => {
         </div>
         <div className="md:w-1/2 flex justify-center animate-float">
           <div className="relative w-full max-w-md">
-            <div className="absolute -top-4 -left-4 w-72 h-72 bg-violet-600/20 rounded-full filter blur-3xl opacity-70 z-0 animate-pulse"></div>
-            <div className="absolute -bottom-8 -right-8 w-72 h-72 bg-fuchsia-600/20 rounded-full filter blur-3xl opacity-70 z-0 animate-pulse"></div>
+            <div className="absolute -top-4 -left-4 w-72 h-72 bg-primary/20 rounded-full filter blur-3xl opacity-70 z-0 animate-pulse"></div>
+            <div className="absolute -bottom-8 -right-8 w-72 h-72 bg-primary/20 rounded-full filter blur-3xl opacity-70 z-0 animate-pulse"></div>
             <img 
               src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" 
               alt="Alumni and students networking" 
@@ -72,8 +73,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Features Section with neon cards */}
-      <section className="bg-black/20 dark:bg-secondary/20 py-16">
+      {/* Features Section with theme-specific cards */}
+      <section className="features-bg py-16">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12 text-gradient">Platform Features</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-animation">
@@ -119,9 +120,9 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Call to Action with enhanced neon glass effect */}
+      {/* Call to Action with enhanced theme-specific glass effect */}
       <section className="container mx-auto px-4 py-16">
-        <div className="glass-card rounded-xl p-8 md:p-12 text-center animate-fade-slide-in">
+        <div className="glass-card neo-box rounded-xl p-8 md:p-12 text-center animate-fade-slide-in">
           <h2 className="text-3xl font-bold mb-4 text-gradient">Ready to Join AlumniSphere?</h2>
           <p className="text-lg mb-8 max-w-2xl mx-auto text-muted-foreground">
             Whether you're an alumni looking to give back or a student seeking guidance,
@@ -129,12 +130,12 @@ const Index = () => {
           </p>
           <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
             <Link to="/signup">
-              <Button size="lg" className="w-full sm:w-auto">
+              <Button size="lg" className="w-full sm:w-auto premium-gradient text-white">
                 Create Account
               </Button>
             </Link>
             <Link to="/login">
-              <Button size="lg" variant="outline" className="w-full sm:w-auto">
+              <Button size="lg" variant="outline" className="w-full sm:w-auto light-border">
                 Sign In
               </Button>
             </Link>
@@ -142,12 +143,12 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Footer with neon border */}
-      <footer className="mt-auto border-t border-violet-500/20 bg-black/20 dark:bg-secondary/20">
+      {/* Footer with theme-specific border */}
+      <footer className="mt-auto footer-bg">
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
-              <h1 className="text-xl font-bold">AlumniSphere</h1>
+              <h1 className="text-xl font-bold text-gradient">AlumniSphere</h1>
               <p className="text-sm text-muted-foreground">Connecting alumni and students for success</p>
             </div>
             <div className="flex space-x-6">
