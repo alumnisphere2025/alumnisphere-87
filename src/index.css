@@ -1,11 +1,10 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 213 100% 98%;
+    --background: 210 40% 98%;
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -14,16 +13,16 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 213 90% 45%;
+    --primary: 221.2 83.2% 53.3%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 213 20% 95%;
+    --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 213 50% 92%;
+    --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
@@ -31,7 +30,7 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 213 90% 45%;
+    --ring: 221.2 83.2% 53.3%;
 
     --radius: 0.75rem;
   }
@@ -77,18 +76,17 @@
 }
 
 .glass-card {
-  @apply bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-white/20 dark:border-slate-700/30 shadow-xl;
+  @apply bg-white/90 dark:bg-slate-900/80 backdrop-blur-md border border-white/30 dark:border-slate-700/30 shadow-xl hover:shadow-2xl transition-all duration-300;
 }
 
 .premium-gradient {
-  @apply bg-gradient-to-r from-blue-700 to-blue-500;
+  @apply bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-700 dark:to-blue-500;
 }
 
 .text-gradient {
-  @apply bg-gradient-to-r from-blue-700 to-blue-500 bg-clip-text text-transparent;
+  @apply bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-700 dark:to-blue-500 bg-clip-text text-transparent;
 }
 
-/* Add new animations */
 @keyframes float {
   0% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
@@ -124,3 +122,15 @@
 .stagger-animation > *:nth-child(3) { animation-delay: 0.3s; }
 .stagger-animation > *:nth-child(4) { animation-delay: 0.4s; }
 .stagger-animation > *:nth-child(5) { animation-delay: 0.5s; }
+
+.light-card {
+  @apply bg-gradient-to-br from-white to-blue-50/50 shadow-lg hover:shadow-xl transition-all duration-300;
+}
+
+.light-hover {
+  @apply hover:bg-blue-50/50 transition-colors duration-200;
+}
+
+.light-border {
+  @apply border border-blue-100/50;
+}

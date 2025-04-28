@@ -9,7 +9,7 @@ const Index = () => {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       {/* Navbar with glass effect */}
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-background/80 border-b">
+      <header className="sticky top-0 z-50 backdrop-blur-md bg-background/80 border-b border-border/50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center">
             <h1 className="text-2xl font-bold text-gradient">
@@ -39,7 +39,7 @@ const Index = () => {
       {/* Hero Section with animation */}
       <section className="container mx-auto px-4 py-16 md:py-24 flex flex-col md:flex-row items-center">
         <div className="md:w-1/2 mb-8 md:mb-0 animate-fade-slide-in">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-gradient">
             Connecting Alumni &<br />Students for Success
           </h2>
           <p className="text-lg mb-8 text-muted-foreground">
@@ -48,12 +48,12 @@ const Index = () => {
           </p>
           <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
             <Link to="/signup">
-              <Button size="lg" className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white">
+              <Button size="lg" className="w-full sm:w-auto premium-gradient text-white hover:opacity-90">
                 Join the Community
               </Button>
             </Link>
             <Link to="/login">
-              <Button size="lg" variant="outline" className="w-full sm:w-auto">
+              <Button size="lg" variant="outline" className="w-full sm:w-auto light-border light-hover">
                 Log In
               </Button>
             </Link>
@@ -61,8 +61,8 @@ const Index = () => {
         </div>
         <div className="md:w-1/2 flex justify-center animate-float">
           <div className="relative w-full max-w-md">
-            <div className="absolute -top-4 -left-4 w-72 h-72 bg-primary/30 rounded-full filter blur-3xl opacity-70 z-0 animate-pulse"></div>
-            <div className="absolute -bottom-8 -right-8 w-72 h-72 bg-primary/20 rounded-full filter blur-3xl opacity-70 z-0 animate-pulse"></div>
+            <div className="absolute -top-4 -left-4 w-72 h-72 bg-blue-400/20 rounded-full filter blur-3xl opacity-70 z-0 animate-pulse"></div>
+            <div className="absolute -bottom-8 -right-8 w-72 h-72 bg-blue-300/20 rounded-full filter blur-3xl opacity-70 z-0 animate-pulse"></div>
             <img 
               src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" 
               alt="Alumni and students networking" 
@@ -73,12 +73,12 @@ const Index = () => {
       </section>
 
       {/* Features Section with stagger animation */}
-      <section className="bg-secondary/50 py-16">
+      <section className="bg-blue-50/50 dark:bg-secondary/50 py-16">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12 text-gradient">Platform Features</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-animation">
-            {/* Feature cards with glass effect */}
-            <div className="glass-card rounded-lg p-6 hover:scale-105 transition-transform duration-300">
+            {/* Feature cards with enhanced glass effect */}
+            <div className="light-card rounded-lg p-6 hover:scale-105 transition-transform duration-300">
               <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -91,10 +91,10 @@ const Index = () => {
               </p>
             </div>
             
-            <div className="glass-card rounded-lg p-6 hover:scale-105 transition-transform duration-300">
+            <div className="light-card rounded-lg p-6 hover:scale-105 transition-transform duration-300">
               <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
               </div>
               <h3 className="text-xl font-semibold mb-2 text-gradient">Referral Network</h3>
@@ -104,7 +104,7 @@ const Index = () => {
               </p>
             </div>
             
-            <div className="glass-card rounded-lg p-6 hover:scale-105 transition-transform duration-300">
+            <div className="light-card rounded-lg p-6 hover:scale-105 transition-transform duration-300">
               <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -120,7 +120,7 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Call to Action with glass effect */}
+      {/* Call to Action with enhanced glass effect */}
       <section className="container mx-auto px-4 py-16">
         <div className="glass-card rounded-xl p-8 md:p-12 text-center animate-fade-slide-in">
           <h2 className="text-3xl font-bold mb-4 text-gradient">Ready to Join AlumniSphere?</h2>
@@ -143,8 +143,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Footer with gradient */}
-      <footer className="mt-auto border-t bg-secondary/30">
+      {/* Footer with enhanced styling */}
+      <footer className="mt-auto border-t bg-blue-50/30 dark:bg-secondary/30">
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
